@@ -17,7 +17,7 @@
         empty todolist
       </ul>
     </form>
-    <button v-if="filterData.length" @click="hideCompleted = !hideCompleted">
+    <button v-if="todoData.length" @click="hideCompleted = !hideCompleted">
       {{ hideCompleted ? 'show all' : 'hideCompleted' }}
     </button>
     <small
