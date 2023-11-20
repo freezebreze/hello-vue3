@@ -43,7 +43,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'todo',
-    component: () => import('@/views/example/index.vue'),
+    component: () => import('@/views/todo/index.vue'),
     meta: {
       title: 'todo',
     },
