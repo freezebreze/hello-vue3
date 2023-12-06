@@ -71,6 +71,7 @@ export default defineConfig(({ mode }) => {
           manualChunks,
         },
       },
+      outDir: 'docs',
     },
 
     resolve: {
