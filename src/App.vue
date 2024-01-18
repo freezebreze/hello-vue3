@@ -1,5 +1,7 @@
 <template>
-  <router-view :key="key" />
+  <n-message-provider>
+    <router-view :key="key" />
+  </n-message-provider>
 </template>
 
 <script setup lang="ts">

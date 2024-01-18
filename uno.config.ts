@@ -1,5 +1,6 @@
 import { defineConfig } from '@bassist/uno'
-
+import { presetWind } from 'unocss'
+import { presetDaisy } from 'unocss-preset-daisy'
 // https://github.com/chengpeiquan/bassist/tree/main/packages/uno
 export default defineConfig({
   theme: {
@@ -13,4 +14,5 @@ export default defineConfig({
       hover: 'var(--c-hover)',
     },
   },
+  presets: [presetWind(), presetDaisy()],
 })

@@ -1,56 +1,174 @@
 <template>
-  <div class="todo">
-    <form @submit.prevent="addItem" id="todoform">
-      <input placeholder="Enter your todo" v-model="newTodo" />
-      <ul v-if="filterData.length" class="todos">
-        <li
-          @click="todo.done = !todo.done"
-          @contextmenu.prevent="removeItem(todo)"
-          :class="{ completed: todo.done }"
-          v-for="todo in filterData"
-          :key="todo.id"
-        >
-          <span>{{ todo.context }}</span>
-        </li>
-      </ul>
-      <ul class="empty" v-else>
-        empty todolist
-      </ul>
-    </form>
-    <button v-if="todoData.length" @click="hideCompleted = !hideCompleted">
-      {{ hideCompleted ? 'show all' : 'hideCompleted' }}
-    </button>
-    <small
-      >Left click to toggle completed. <br />
-      Right click to delete todo</small
+  <div class="w-full m-2 gap-2 flex">
+    <ToggleTheme @start-drive="actionDrive"></ToggleTheme>
+  </div>
+  <Logo class="my-16"></Logo>
+
+  <AddInput id="todoinput" @add-item="addItem"></AddInput>
+  <div
+    class="w-full flex flex-col items-center justify-center font-sans overflow-y-auto"
+  >
+    <div
+      id="drive-input"
+      v-if="!isDrive"
+      class="flex items-center justify-center mt16 w-[46rem]"
     >
+      <label
+        class="cursor-pointer w-full p-4 transition ease-in-out delay-150 bg-[#262626] rounded-2 shadow border border-white justify-start items-center gap-3 inline-flex"
+      >
+        <input type="checkbox" class="checkbox" />
+        <span class="text-[#F2F2F2] break-words overflow-y-auto grow"
+          >这是一个示例</span
+        >
+        <img
+          id="drive-trash"
+          class="w-6 h-6"
+          src="@/assets/icons/trash.svg"
+          alt="log"
+        />
+      </label>
+    </div>
+    <TodoList
+      v-else-if="todoData.length"
+      @remove-item="removeItem"
+      :data="listdata"
+    ></TodoList>
+    <div
+      v-else
+      class="w-full h-full flex flex-col items-center justify-center my-16 gap-4"
+    >
+      <img src="../../assets/img/Clipboard.png" alt="Clipboard" />
+      <p class="text-zinc-500 text-base font-bold leading-snug">
+        您还没有创建有任何待办事项
+      </p>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useTodoStore } from '@/stores/todo'
+import ToggleTheme from '@/components/ToggleTheme.vue'
+import AddInput from './components/AddInput.vue'
+import TodoList from './components/TodoList.vue'
+import Logo from './components/Logo.vue'
+import { driver } from 'driver.js'
+import 'driver.js/dist/driver.css'
+import { useStorage } from '@/hooks'
 const store = useTodoStore()
+const { storage } = useStorage()
 const { todoData, id } = storeToRefs(store)
-let hideCompleted = ref(false)
-const newTodo = ref('')
-
-let filterData = computed(() => {
-  return hideCompleted.value
-    ? todoData.value.filter((item) => !item.done)
-    : todoData.value
+const listdata = computed(() =>
+  todoData.value.sort((pre, cur) => {
+    return cur.id - pre.id
+  }),
+)
+const isDrive = ref(storage.get('todo-driver'))
+// let hideCompleted = ref(false)
+const msg = useMessage()
+const driverObj = driver({
+  showProgress: true,
+  allowClose: false,
+  steps: [
+    {
+      popover: {
+        title: '小软任务计划',
+        description: '欢迎来到小软任务计划列表，接下来将为你介绍使用方式',
+        nextBtnText: '下一步',
+        prevBtnText: '前一步',
+      },
+    },
+    {
+      element: '#theme',
+      popover: {
+        title: '深色模式',
+        description: '点击切换深色模式',
+        nextBtnText: '下一步',
+        prevBtnText: '前一步',
+      },
+    },
+    {
+      element: '#drive-help',
+      popover: {
+        title: '操作提示',
+        description: '点击显示操作提示',
+        nextBtnText: '下一步',
+        prevBtnText: '前一步',
+      },
+    },
+    {
+      element: '#todoinput',
+      popover: {
+        title: '输入',
+        description: '在这里输入待办事项',
+        prevBtnText: '前一步',
+        nextBtnText: '下一步',
+        side: 'top',
+        align: 'center',
+      },
+    },
+    {
+      element: '#todo-submit',
+      popover: {
+        title: '提交',
+        description: '点击按钮或者回车提交输入',
+        prevBtnText: '前一步',
+        nextBtnText: '下一步',
+      },
+    },
+    {
+      element: '#drive-input',
+      popover: {
+        title: '事项',
+        description: '单击完成该事项',
+        prevBtnText: '前一步',
+        nextBtnText: '下一步',
+        side: 'bottom',
+        align: 'center',
+      },
+    },
+    {
+      element: '#drive-trash',
+      popover: {
+        title: '删除',
+        description: '单击移除该事项',
+        prevBtnText: '前一步',
+        nextBtnText: '完成',
+        side: 'bottom',
+        align: 'center',
+        onNextClick: () => {
+          isDrive.value = true
+          storage.set('todo-driver', true)
+          driverObj.moveNext()
+        },
+      },
+    },
+  ],
 })
-function addItem(): void {
-  if (!newTodo.value) {
-    alert('请输入要代办的事项')
+
+onMounted(() => {
+  if (!isDrive.value) {
+    driverObj.drive()
+  }
+})
+function addItem(message: string): void {
+  if (message === '') {
+    msg.info('请输入要待办的事项', {
+      duration: 2000,
+      // closable: true,
+    })
     return
   }
   let item: TodoItem = {
     id: id.value,
-    context: newTodo.value,
+    context: message,
     done: false,
+    time: new Date().getTime(),
   }
-  newTodo.value = ''
   store.updateMessageSync(item)
+}
+function actionDrive() {
+  isDrive.value = false
+  driverObj.drive()
 }
 function removeItem(todo: TodoItem) {
   // todoData.value = todoData.value.filter((item) => item.id != todo.id)
@@ -58,83 +176,4 @@ function removeItem(todo: TodoItem) {
 }
 </script>
 
-<style lang="less" scoped>
-.todo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: var(--c-text);
-  padding: calc(var(--w-space) * 3) 0;
-  margin: 0 auto;
-  background-color: #f5f5f5;
-}
-
-#todoform {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  max-width: 100%;
-  width: 400px;
-  > input {
-    text-align: center;
-    border: none;
-    color: #444;
-    font-size: 2rem;
-    padding: 1rem 2rem;
-    display: block;
-    width: 100%;
-    padding: 0;
-    ::placeholder {
-      color: #d5d5d5;
-    }
-    :focus {
-      outline-color: rgb(179, 131, 226);
-    }
-  }
-}
-
-.todos {
-  background-color: #fff;
-  padding: 0;
-  margin: 0;
-  list-style-type: none;
-  li {
-    border-top: 1px solid #e5e5e5;
-    cursor: pointer;
-    font-size: 1.5rem;
-    padding: 1rem 2rem;
-  }
-  li.completed {
-    color: #b6b6b6;
-    text-decoration: line-through;
-  }
-}
-
-.empty {
-  color: #444;
-  background-color: #fff;
-  padding: 0;
-  margin: 0;
-  font-size: 1.5rem;
-  padding: 1rem 2rem;
-  text-align: center;
-}
-small {
-  color: #b5b5b5;
-  margin-top: 3rem;
-  text-align: center;
-}
-
-button {
-  width: 400px;
-  height: 40px;
-  background-color: #fff;
-  border: 0;
-  border-radius: 5px;
-  margin-top: 20px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-</style>
+<style lang="less" scoped></style>
