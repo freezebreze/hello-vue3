@@ -1,12 +1,12 @@
 <template>
-  <div class="flex flex-col flex justify-center content-center w-[46rem] my-16">
+  <div class="flex flex-col flex justify-center content-center my-16 w-full">
     <div class="justify-between items-end inline-flex mb-6">
       <span class="text-[#4EA8DE] text-sm font-bold">任务总数:{{ total }}</span>
       <span class="text-indigo-400 text-sm font-bold"
         >已完成:{{ completeNum }} / {{ total }}</span
       >
     </div>
-    <div class="flex flex-col gap-3 w-full">
+    <div class="flex flex-col gap-3">
       <label
         v-for="item in data"
         :key="item.id"

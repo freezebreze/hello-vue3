@@ -1,46 +1,54 @@
 <template>
-  <div class="w-full m-2 gap-2 flex">
-    <ToggleTheme @start-drive="actionDrive"></ToggleTheme>
-  </div>
-  <Logo class="my-16"></Logo>
-
-  <AddInput id="todoinput" @add-item="addItem"></AddInput>
-  <div
-    class="w-full flex flex-col items-center justify-center font-sans overflow-y-auto"
-  >
-    <div
-      id="drive-input"
-      v-if="!isDrive"
-      class="flex items-center justify-center mt16 w-[46rem]"
-    >
-      <label
-        class="cursor-pointer w-full p-4 transition ease-in-out delay-150 bg-[#262626] rounded-2 shadow border border-white justify-start items-center gap-3 inline-flex"
-      >
-        <input type="checkbox" class="checkbox" />
-        <span class="text-[#F2F2F2] break-words overflow-y-auto grow"
-          >这是一个示例</span
-        >
-        <img
-          id="drive-trash"
-          class="w-6 h-6"
-          src="@/assets/icons/trash.svg"
-          alt="log"
-        />
-      </label>
+  <div class="w-full h-full flex-col items-center justify-center">
+    <div class="m-2 gap-3 flex">
+      <ToggleTheme @start-drive="actionDrive"></ToggleTheme>
     </div>
-    <TodoList
-      v-else-if="todoData.length"
-      @remove-item="removeItem"
-      :data="listdata"
-    ></TodoList>
-    <div
-      v-else
-      class="w-full h-full flex flex-col items-center justify-center my-16 gap-4"
-    >
-      <img src="../../assets/img/Clipboard.png" alt="Clipboard" />
-      <p class="text-zinc-500 text-base font-bold leading-snug">
-        您还没有创建有任何待办事项
-      </p>
+    <Logo class="my-16"></Logo>
+
+    <div class="flex flex-col items-center justify-center p-3">
+      <AddInput
+        class="w-[24rem] sm:w-[46rem]"
+        id="todoinput"
+        @add-item="addItem"
+      ></AddInput>
+      <div
+        class="flex flex-col items-center justify-center w-[24rem] sm:w-[46rem] overflow-x-hidden overflow-y-auto"
+      >
+        <div
+          id="drive-input"
+          v-if="!isDrive"
+          class="flex items-center justify-center mt16 w-full"
+        >
+          <label
+            class="cursor-pointer w-full p-4 transition ease-in-out delay-150 bg-[#262626] rounded-2 shadow border border-white justify-start items-center gap-3 inline-flex"
+          >
+            <input type="checkbox" class="checkbox" />
+            <span class="text-[#F2F2F2] break-words overflow-y-auto grow"
+              >这是一个示例</span
+            >
+            <img
+              id="drive-trash"
+              class="w-6 h-6"
+              src="@/assets/icons/trash.svg"
+              alt="log"
+            />
+          </label>
+        </div>
+        <TodoList
+          v-else-if="todoData.length"
+          @remove-item="removeItem"
+          :data="listdata"
+        ></TodoList>
+        <div
+          v-else
+          class="w-full h-full flex flex-col items-center justify-center my-16 gap-4"
+        >
+          <img src="../../assets/img/Clipboard.png" alt="Clipboard" />
+          <p class="text-zinc-500 text-base font-bold leading-snug">
+            您还没有创建有任何待办事项
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -1,9 +1,6 @@
 <template>
-  <form
-    @submit.prevent=""
-    class="flex flex-col items-center justify-center sticky"
-  >
-    <div class="flex justify-center items-center gap-2 w-[46rem]">
+  <form class="w-full flex justify-center" @submit.prevent="">
+    <div class="inline-flex gap-2 items-stretch justify-stretch flex-1">
       <input
         placeholder="输入您的待办事项"
         v-model="message"
@@ -13,10 +10,14 @@
         id="todo-submit"
         type="submit"
         @click="add"
-        class="flex w-[98px] hover:cursor-pointer text-center items-center justify-center text-sm p-4 text-[#F2F2F2] bg-[#1E6F9F] hover:bg-cyan-800 rounded-2 border-0"
+        class="inline-flex w-24 hover:cursor-pointer items-center justify-center text-sm p-4 text-[#F2F2F2] bg-[#1E6F9F] hover:bg-cyan-800 rounded-2 border-0"
       >
-        <span class="mr-2">新增</span>
-        <img src="@/assets/icons/plus.svg" alt="add button" />
+        <span class="sm:mr-2">新增</span>
+        <img
+          class="hidden sm:block"
+          src="@/assets/icons/plus.svg"
+          alt="add button"
+        />
       </button>
     </div>
   </form>
