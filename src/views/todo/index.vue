@@ -7,12 +7,12 @@
 
     <div class="flex flex-col items-center justify-center p-3">
       <AddInput
-        class="w-[24rem] sm:w-[46rem]"
+        class="w-[22rem] sm:w-[46rem]"
         id="todoinput"
         @add-item="addItem"
       ></AddInput>
       <div
-        class="flex flex-col items-center justify-center w-[24rem] sm:w-[46rem] overflow-x-hidden overflow-y-auto"
+        class="flex flex-col items-center justify-center w-[22rem] sm:w-[46rem] my-16 overflow-x-hidden overflow-y-auto"
       >
         <div
           id="drive-input"
@@ -81,6 +81,14 @@ const driverObj = driver({
       popover: {
         title: '小软任务计划',
         description: '欢迎来到小软任务计划列表，接下来将为你介绍使用方式',
+        nextBtnText: '下一步',
+        prevBtnText: '前一步',
+      },
+    },
+    {
+      popover: {
+        title: '持久化存储',
+        description: '数据保存在浏览器刷新也不会丢失',
         nextBtnText: '下一步',
         prevBtnText: '前一步',
       },
