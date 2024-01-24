@@ -32,6 +32,12 @@
               src="@/assets/icons/trash.svg"
               alt="log"
             />
+            <img
+              id="drive-edit"
+              class="w-6 h-6"
+              src="@/assets/icons/edit.svg"
+              alt="log"
+            />
           </label>
         </div>
         <TodoList
@@ -137,6 +143,17 @@ const driverObj = driver({
       popover: {
         title: '事项',
         description: '单击完成该事项',
+        prevBtnText: '前一步',
+        nextBtnText: '下一步',
+        side: 'bottom',
+        align: 'center',
+      },
+    },
+    {
+      element: '#drive-edit',
+      popover: {
+        title: '编辑',
+        description: '单击修改内容',
         prevBtnText: '前一步',
         nextBtnText: '下一步',
         side: 'bottom',
