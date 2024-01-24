@@ -65,7 +65,6 @@
       </template>
     </n-card>
   </n-modal>
-  >
 </template>
 
 <script setup lang="ts">
