@@ -64,10 +64,11 @@
 import { isDark as isDarkMode } from '@bassist/utils'
 import { useStorage } from '@/hooks'
 import type { PrefersColorScheme } from '@bassist/utils'
-
+import DarkKey from '../util/SymbolKey'
 const { storage } = useStorage()
 const STORAGE_KEY = 'theme-appearance'
 const isDark = ref<boolean>(isDarkMode())
+let globaIsDark = inject(DarkKey) as Ref<boolean>
 const emit = defineEmits<{
   (e: 'start-drive'): void
 }>()
@@ -90,6 +91,7 @@ updateTheme(defaultThemeIsDark)
 
 function toggleTheme() {
   const isCurrentThemeDark = getLocalTheme() === 'dark'
+  globaIsDark.value = !globaIsDark?.value
   updateTheme(!isCurrentThemeDark)
 }
 function startDrive() {

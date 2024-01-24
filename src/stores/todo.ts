@@ -1,3 +1,4 @@
+import { log } from 'console'
 import { defineStore } from 'pinia'
 
 export const useTodoStore = defineStore('todo', {
@@ -23,11 +24,19 @@ export const useTodoStore = defineStore('todo', {
       })
     },
     // 同步更新 todo
-    updateMessageSync(todo: TodoItem): string {
+    updateTodoSync(todo: TodoItem): string {
       // 这里的 this 是当前的 Store 实例
       this.todoData.push(todo)
       this.id++
       return 'Sync done.'
+    },
+    editTodoSync(todo: TodoItem): void {
+      if (todo.context) return
+      this.todoData.filter((v) => {
+        if (v.id == todo.id) {
+          return todo
+        }
+      })
     },
     // 删除todo
     removeTodo(todo: TodoItem) {

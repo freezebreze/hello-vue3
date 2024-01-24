@@ -37,6 +37,7 @@
         <TodoList
           v-else-if="todoData.length"
           @remove-item="removeItem"
+          @edit-item="editItem"
           :data="listdata"
         ></TodoList>
         <div
@@ -180,7 +181,7 @@ function addItem(message: string): void {
     done: false,
     time: new Date().getTime(),
   }
-  store.updateMessageSync(item)
+  store.updateTodoSync(item)
 }
 function actionDrive() {
   isDrive.value = false
@@ -189,6 +190,9 @@ function actionDrive() {
 function removeItem(todo: TodoItem) {
   // todoData.value = todoData.value.filter((item) => item.id != todo.id)
   store.removeTodo(todo)
+}
+function editItem(todo: TodoItem) {
+  store.editTodoSync(todo)
 }
 </script>
 

@@ -29,21 +29,83 @@
           src="@/assets/icons/trash.svg"
           alt="log"
         />
+        <img
+          class="w-6 h-6"
+          @click.prevent="openModal(item)"
+          src="@/assets/icons/edit.svg"
+          alt="log"
+        />
       </label>
     </div>
   </div>
+  <n-modal v-model:show="showModal" transform-origin="center">
+    <n-card
+      style="width: 600px"
+      title="编辑"
+      :bordered="false"
+      role="dialog"
+      aria-modal="true"
+      :closable="true"
+      :on-close="closeModal"
+      :size="isDesktop ? 'huge' : 'small'"
+    >
+      <n-input
+        type="text"
+        :default-value="curEdit.context"
+        size="large"
+        round
+        :on-input="(v) => (editMsg = v)"
+      />
+      <template #footer>
+        <div class="flex items-center justify-center">
+          <n-button attr-type="submit" @click="updateMessage" size="large"
+            >保存</n-button
+          >
+        </div>
+      </template>
+    </n-card>
+  </n-modal>
+  >
 </template>
 
 <script setup lang="ts">
+import { isMobile } from '@bassist/utils'
 const props = defineProps<{ data: TodoItem[] }>()
 const emit = defineEmits<{
   (e: 'remove-item', item: TodoItem): void
+  (e: 'edit-item', item: TodoItem): void
+  (e: 'close-model'): void
 }>()
+const showModal = ref(false)
+const isDesktop = ref(true)
+const editMsg = ref('')
+const msg = useMessage()
+let curEdit = reactive({} as TodoItem)
+function updateMessage() {
+  if (editMsg.value == '') {
+    msg.info('请输入修改后的待办事项', {
+      duration: 2000,
+      // closable: true,
+    })
+    return
+  }
+  curEdit.context = editMsg.value
+  emit('edit-item', curEdit)
+  showModal.value = false
+}
+function openModal(item: TodoItem) {
+  curEdit = item
+  isDesktop.value = isMobile() ? false : true
+  showModal.value = true
+}
 function remove(item: TodoItem) {
   emit('remove-item', item)
 }
 function done(item: TodoItem) {
   item.done = !item.done
+}
+function closeModal() {
+  showModal.value = false
 }
 let total = computed(() => props.data.length)
 let completeNum = computed(() => {
