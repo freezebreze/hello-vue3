@@ -7,35 +7,37 @@
       >
     </div>
     <div class="flex flex-col gap-3">
-      <label
-        v-for="item in data"
-        :key="item.id"
-        class="cursor-pointer p-4 dark:bg-[#262626] dark:text-[#F2F2F2] bg-slate-200 hover:bg-slate-100 dark:hover:bg-slate-400 text-black rounded-2 shadow border border-white justify-start items-center gap-3 inline-flex"
-      >
-        <input
-          type="checkbox"
-          class="checkbox"
-          :checked="item.done"
-          @click="done(item)"
-        />
-        <span
-          class="break-words overflow-y-auto grow"
-          :class="item.done ? 'line-through' : ''"
-          >{{ item.context }}</span
+      <transition-group name="list">
+        <label
+          v-for="item in data"
+          :key="item.id"
+          class="cursor-pointer p-4 dark:bg-[#262626] dark:text-[#F2F2F2] bg-slate-200 hover:bg-slate-100 dark:hover:bg-slate-400 text-black rounded-2 shadow border border-white justify-start items-center gap-3 inline-flex"
         >
-        <img
-          class="w-6 h-6"
-          @click="remove(item)"
-          src="@/assets/icons/trash.svg"
-          alt="log"
-        />
-        <img
-          class="w-6 h-6"
-          @click.prevent="openModal(item)"
-          src="@/assets/icons/edit.svg"
-          alt="log"
-        />
-      </label>
+          <input
+            type="checkbox"
+            class="checkbox"
+            :checked="item.done"
+            @click="done(item)"
+          />
+          <span
+            class="break-words overflow-y-auto grow"
+            :class="item.done ? 'line-through' : ''"
+            >{{ item.context }}</span
+          >
+          <img
+            class="w-6 h-6"
+            @click.prevent="remove(item)"
+            src="@/assets/icons/trash.svg"
+            alt="log"
+          />
+          <img
+            class="w-6 h-6"
+            @click.prevent="openModal(item)"
+            src="@/assets/icons/edit.svg"
+            alt="log"
+          />
+        </label>
+      </transition-group>
     </div>
   </div>
   <n-modal v-model:show="showModal" transform-origin="center">
@@ -119,13 +121,13 @@ let completeNum = computed(() => {
 </script>
 
 <style lang="less" scoped>
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.5s ease;
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.3s ease;
 }
-
-.v-enter-from,
-.v-leave-to {
+.list-enter-from,
+.list-leave-to {
   opacity: 0;
+  transform: translateX(30px);
 }
 </style>
