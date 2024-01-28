@@ -10,7 +10,7 @@
       <label
         v-for="item in data"
         :key="item.id"
-        class="cursor-pointer p-4 transition ease-in-out delay-150 bg-[#262626] rounded-2 shadow border border-white justify-start items-center gap-3 inline-flex"
+        class="cursor-pointer p-4 dark:bg-[#262626] dark:text-[#F2F2F2] bg-slate-200 hover:bg-slate-100 dark:hover:bg-slate-400 text-black rounded-2 shadow border border-white justify-start items-center gap-3 inline-flex"
       >
         <input
           type="checkbox"
@@ -19,7 +19,7 @@
           @click="done(item)"
         />
         <span
-          class="text-[#F2F2F2] break-words overflow-y-auto grow"
+          class="break-words overflow-y-auto grow"
           :class="item.done ? 'line-through' : ''"
           >{{ item.context }}</span
         >
