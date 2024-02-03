@@ -40,7 +40,7 @@
       </transition-group>
     </div>
   </div>
-  <n-modal v-model:show="showModal" transform-origin="center">
+  <n-modal v-model:show="showModal" transform-origin="mouse">
     <n-card
       style="width: 600px"
       title="编辑"
@@ -81,6 +81,7 @@ const showModal = ref(false)
 const isDesktop = ref(true)
 const editMsg = ref('')
 const msg = useMessage()
+const dialog = useDialog()
 let curEdit = reactive({} as TodoItem)
 function updateMessage() {
   if (editMsg.value == '') {
@@ -100,7 +101,17 @@ function openModal(item: TodoItem) {
   showModal.value = true
 }
 function remove(item: TodoItem) {
-  emit('remove-item', item)
+  dialog.warning({
+    title: '警告',
+    content: '确定移除?',
+    positiveText: '确定',
+    negativeText: '取消',
+    onPositiveClick: () => {
+      msg.success('移除成功')
+      emit('remove-item', item)
+    },
+    onNegativeClick: () => {},
+  })
 }
 function done(item: TodoItem) {
   item.done = !item.done
