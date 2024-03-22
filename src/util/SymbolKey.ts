@@ -1,2 +1,1 @@
-const DarkKey = Symbol()
-export default DarkKey
+export const DarkKey = Symbol() as InjectionKey<Ref<boolean>>
