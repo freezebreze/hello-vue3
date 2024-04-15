@@ -48,6 +48,14 @@ const routes: RouteRecordRaw[] = [
       title: 'todo',
     },
   },
+  {
+    path: '/test',
+    name: 'test',
+    component: () => import('@/views/home/index.vue'),
+    meta: {
+      title: 'test',
+    },
+  },
 ]
 
 export default routes

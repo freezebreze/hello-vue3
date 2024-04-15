@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 import autoImport from 'unplugin-auto-import/vite'
 import components from 'unplugin-vue-components/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
@@ -143,7 +144,7 @@ export default defineConfig(({ mode }) => {
        *
        * @see https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue-jsx
        */
-      // vueJsx(),
+      vueJsx(),
 
       /**
        * 如果需要兼容低版本浏览器，请安装 `@vitejs/plugin-legacy` 这个包
