@@ -20,10 +20,11 @@
           class="flex items-center justify-center mt16 w-full"
         >
           <label
-            class="cursor-pointer w-full p-4 transition ease-in-out delay-150 bg-[#262626] rounded-2 shadow border border-white justify-start items-center gap-3 inline-flex"
+            class="cursor-pointer w-full p-4 transition ease-in-out delay-150 bg-slate-200 dark:bg-[#262626] rounded-2 shadow border border-white justify-start items-center gap-3 inline-flex"
           >
             <input type="checkbox" class="checkbox" />
-            <span class="text-[#F2F2F2] break-words overflow-y-auto grow"
+            <span
+              class="dark:text-[#F2F2F2] text-gray-8 break-words overflow-y-auto grow"
               >这是一个示例</span
             >
             <img
@@ -82,7 +83,12 @@ const isDrive = ref(storage.get('todo-driver'))
 const msg = useMessage()
 const driverObj = driver({
   showProgress: true,
-  allowClose: false,
+  allowClose: true,
+  onDestroyed: () => {
+    isDrive.value = true
+    storage.set('todo-driver', true)
+  },
+
   steps: [
     {
       popover: {
